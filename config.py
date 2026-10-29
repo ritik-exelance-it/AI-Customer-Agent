@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Central configuration for the AI customer support agent."""
+    """Central config for the AI customer support agent."""
 
     # Application settings
     app_name: str = "AI Customer Support Agent"

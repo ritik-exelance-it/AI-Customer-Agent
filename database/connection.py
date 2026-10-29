@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 import sqlite3
 from pathlib import Path
-from typing import Iterator
+from typing import Generator 
 
 from config import get_settings
 
@@ -9,7 +9,7 @@ from config import get_settings
 @contextmanager
 def get_connection(
     db_path: str | Path | None = None,
-) -> Iterator[sqlite3.Connection]:
+) -> Generator[sqlite3.Connection, None, None]:  
     """Open a SQLite connection and close it safely after use."""
 
     if db_path is None:
