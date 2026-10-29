@@ -6,6 +6,14 @@ from langchain_core.messages import AnyMessage
 from langgraph.graph.message import add_messages
 
 
+class SourceReference(TypedDict):
+    """Metadata identifying a retrieved knowledge-base excerpt."""
+
+    source: str
+    chunk_index: int
+    score: float
+
+
 class SupportState(TypedDict):
     """Shared state passed between LangGraph nodes."""
 
@@ -17,5 +25,5 @@ class SupportState(TypedDict):
     intent: str | None
     requires_human: bool
 
-    sources: list[dict[str, str]]
+    sources: list[SourceReference]
     error: str | None

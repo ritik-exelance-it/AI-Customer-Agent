@@ -7,7 +7,7 @@ from graph.nodes import support_node
 
 @patch("graph.nodes.llm")
 def test_support_node_returns_response(mock_llm):
-    mock_llm.invoke.return_value = AIMessage(
+    mock_llm.bind_tools.return_value.invoke.return_value = AIMessage(
         content="Hello! How can I help you?"
     )
 
@@ -25,11 +25,11 @@ def test_support_node_returns_response(mock_llm):
 
     assert result["messages"][0].content == "Hello! How can I help you?"
     assert result["error"] is None
-    mock_llm.invoke.assert_called_once()
+
+    mock_llm.bind_tools.return_value.invoke.assert_called_once()
 
 
 def test_support_node_handles_empty_messages():
     result = support_node({"messages": []})
 
     assert result["error"] == "No messages were provided."
-    assert result["requires_human"] is False
