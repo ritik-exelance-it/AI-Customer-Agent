@@ -1,12 +1,7 @@
 from functools import lru_cache
 
-from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-# Load environment variables from .env
-load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -23,12 +18,12 @@ class Settings(BaseSettings):
     model_temperature: float = Field(default=0.0, ge=0.0, le=2.0)
 
     # OpenRouter settings
-    OPENROUTER_API_KEY: str | None = None
+    openrouter_api_key: str | None = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_site_url: str | None = None
     openrouter_app_name: str = "AI Customer Support Agent"
 
-    # Other model provider API keys
+    # Other model providers
     google_api_key: str | None = None
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None
@@ -36,7 +31,7 @@ class Settings(BaseSettings):
     # Web search
     tavily_api_key: str | None = None
 
-    # LangSmith tracing and evaluation
+    # LangSmith
     langsmith_tracing: bool = False
     langsmith_api_key: str | None = None
     langsmith_project: str = "ai-customer-support"
@@ -62,14 +57,16 @@ class Settings(BaseSettings):
             "anthropic": self.anthropic_api_key,
         }
 
-        if self.model_provider not in provider_key_map:
+        provider = self.model_provider.lower()
+
+        if provider not in provider_key_map:
             supported = ", ".join(provider_key_map)
             raise ValueError(
-                f"Unsupported model provider: {self.model_provider}. "
+                f"Unsupported model provider: {provider}. "
                 f"Supported providers: {supported}"
             )
 
-        if not provider_key_map[self.model_provider]:
+        if not provider_key_map[provider]:
             env_key_map = {
                 "openrouter": "OPENROUTER_API_KEY",
                 "google_genai": "GOOGLE_API_KEY",
@@ -77,10 +74,9 @@ class Settings(BaseSettings):
                 "anthropic": "ANTHROPIC_API_KEY",
             }
 
-            required_key = env_key_map[self.model_provider]
             raise ValueError(
-                f"{required_key} is required when using "
-                f"the '{self.model_provider}' provider."
+                f"{env_key_map[provider]} is required "
+                f"when using the '{provider}' provider."
             )
 
 
@@ -90,5 +86,4 @@ def get_settings() -> Settings:
     return Settings()
 
 
-# Shared settings instance
 settings = get_settings()
