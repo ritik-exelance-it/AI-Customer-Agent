@@ -24,3 +24,12 @@ def test_web_search_rejects_empty_query(mock_settings):
 
     assert result["ok"] is False
     assert "empty" in result["error"].lower()
+
+
+@patch("tools.web_search.get_settings")
+def test_web_search_rejects_out_of_scope_query_before_network_setup(mock_settings):
+    result = search_web.invoke({"query": "Find me a pasta recipe"})
+
+    assert result["ok"] is False
+    assert "customer-support" in result["error"]
+    mock_settings.assert_not_called()

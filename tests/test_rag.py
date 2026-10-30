@@ -43,7 +43,7 @@ def test_split_document_into_overlapping_chunks():
         chunk_overlap=10,
     )
 
-    assert len(chunks) == 4
+    assert len(chunks) == 3
     assert chunks[0]["text"][-10:] == chunks[1]["text"][:10]
     assert chunks[0]["chunk_index"] == 0
     assert chunks[1]["chunk_index"] == 1

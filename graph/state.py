@@ -1,29 +1,27 @@
-"""State definition for the customer support workflow."""
+"""Typed state shared by nodes in the support workflow."""
+from __future__ import annotations
 
 from typing import Annotated, TypedDict
-
 from langchain_core.messages import AnyMessage
 from langgraph.graph.message import add_messages
 
 
 class SourceReference(TypedDict):
-    """Metadata identifying a retrieved knowledge-base excerpt."""
-
+    """A knowledge-base source used to ground an answer."""
     source: str
     chunk_index: int
     score: float
 
 
 class SupportState(TypedDict):
-    """Shared state passed between LangGraph nodes."""
-
+    """State persisted by LangGraph between turns of a conversation."""
     messages: Annotated[list[AnyMessage], add_messages]
-
     customer_id: str | None
     ticket_id: str | None
-
     intent: str | None
     requires_human: bool
-
     sources: list[SourceReference]
     error: str | None
+    # Conversation metadata is deliberately optional for backwards compatibility.
+    conversation_id: str | None
+    escalation_reason: str | None

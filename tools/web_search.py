@@ -5,18 +5,24 @@ from urllib.request import Request, urlopen
 from langchain_core.tools import tool
 
 from config import get_settings
-
+from middleware.policies import is_in_scope_support_request
 
 
 @tool
 def search_web(query: str) -> dict:
-    """Search the public web for current information relevant to a customer support question."""
+    """Search the public web only for information relevant to customer support."""
 
     # Validate the query FIRST.
     if not query or not query.strip():
         return {
             "ok": False,
             "error": "Search query cannot be empty.",
+        }
+
+    if not is_in_scope_support_request(query):
+        return {
+            "ok": False,
+            "error": "Web search is restricted to customer-support questions.",
         }
 
     # Check configuration only after validating the query.
