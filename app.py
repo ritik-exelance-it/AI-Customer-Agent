@@ -1,6 +1,6 @@
 """Streamlit frontend for the existing AI Customer Support backend."""
 from __future__ import annotations
-
+from ui.components.ticket_form import render_ticket_form
 import json
 import streamlit as st
 
@@ -81,6 +81,7 @@ with header_right:
     st.markdown(f"<div class='status-label'><span class='status-dot'></span>{status}</div>", unsafe_allow_html=True)
 
 chat_col, context_col = st.columns([0.69, 0.31], gap="large")
+render_ticket_form()
 assistant_messages = [m for m in messages if m.get("role") == "assistant"]
 latest_assistant = assistant_messages[-1] if assistant_messages else {}
 latest_metadata = latest_assistant.get("metadata") or {}

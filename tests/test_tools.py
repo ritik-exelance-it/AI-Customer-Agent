@@ -107,6 +107,7 @@ def test_update_ticket_status(demo_database):
     result = ticket_tools.change_ticket_status(
         ticket_id="TICK-2001",
         new_status="resolved",
+        authorized=True,
         db_path=demo_database,
     )
 
@@ -126,17 +127,19 @@ def test_reject_invalid_ticket_status(demo_database):
     result = ticket_tools.change_ticket_status(
         ticket_id="TICK-2001",
         new_status="random_status",
+        authorized=True,
         db_path=demo_database,
     )
 
     assert result["ok"] is False
-    assert "Invalid status" in result["error"]
+    assert "Invalid ticket status" in result["error"]
 
 
 def test_update_unknown_ticket(demo_database):
     result = ticket_tools.change_ticket_status(
         ticket_id="TICK-9999",
         new_status="resolved",
+        authorized=True,
         db_path=demo_database,
     )
 
@@ -161,5 +164,5 @@ def test_ticket_update_tool(demo_database):
         }
     )
 
-    assert result["ok"] is True
-    assert result["ticket"]["status"] == "in_progress"
+    assert result["ok"] is False
+    assert result["error"] == "Authorization is required to update a ticket."

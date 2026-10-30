@@ -11,17 +11,18 @@ real customer data or exposing it to a network.
 
 ## What it can do
 
-- Answer customer-support questions about products, policies, and
-  troubleshooting using Markdown/text documents in `knowledge_base/`.
+- Answer customer-support questions about products, policies, and troubleshooting using Markdown and text documents in `knowledge_base/`.
 - Show source filenames for knowledge-base answers.
-- Look up a customer by ID, look up a ticket, and list tickets for a customer.
-- Optionally use Tavily for current public-web searches.
-- Store conversations and LangGraph checkpoints in local SQLite files.
-- Record a pending human escalation for selected sensitive requests.
-- Decline clearly unrelated questions with a deterministic support-scope check.
+- Look up customers by ID or name, retrieve support tickets, and list tickets belonging to a customer.
+- Create support tickets through the Streamlit ticket form with explicit user confirmation.
+- Validate ticket subjects, descriptions, priorities, and customer IDs before creating tickets.
+- Record ticket creation and authorized status updates in the audit log.
+- Optionally search the public web using Tavily.
+- Store conversations and LangGraph checkpoints in local SQLite databases.
+- Record requests that need human review.
+- Decline clearly unrelated questions using a support-scope check.
 
-The customer-facing interface does not create tickets or change ticket status.
-Those are not enabled model actions.
+Ticket creation is handled through the application service and repository. Ticket status changes require explicit authorization; the AI assistant should not be treated as an authentication or authorization mechanism.
 
 ## Requirements
 
