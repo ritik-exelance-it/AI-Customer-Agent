@@ -8,16 +8,6 @@ from agents.tools import SUPPORT_TOOLS
 from graph.state import SourceReference, SupportState
 from model import llm
 
-
-def reset_turn_node(state: SupportState) -> dict:
-    """Reset per-turn metadata before processing a new request."""
-
-    return {
-        "sources": [],
-        "error": None,
-    }
-
-
 def support_node(state: SupportState) -> dict:
     """Generate a support response or request a tool."""
 
@@ -70,23 +60,6 @@ def support_node(state: SupportState) -> dict:
                 )
             ],
         }
-
-
-def _parse_tool_content(content) -> dict:
-    """Convert a tool message's content to a dictionary when possible."""
-
-    if isinstance(content, dict):
-        return content
-
-    if isinstance(content, str):
-        try:
-            parsed = json.loads(content)
-            return parsed if isinstance(parsed, dict) else {}
-        except json.JSONDecodeError:
-            return {}
-
-    return {}
-
 
 def escalation_node(state: SupportState) -> dict:
     """Prepare a response when human assistance is required."""

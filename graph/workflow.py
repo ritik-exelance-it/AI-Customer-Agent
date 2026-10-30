@@ -4,8 +4,12 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode
 
 from agents.tools import SUPPORT_TOOLS
-from graph.nodes import support_node, escalation_node
-from graph.nodes import reset_turn_node, collect_sources_node
+from graph.nodes import (
+    collect_sources_node,
+    escalation_node,
+    reset_turn_node,
+    support_node,
+)
 from graph.routing import route_after_support
 from graph.state import SupportState
 
